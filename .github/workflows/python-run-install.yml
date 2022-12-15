@@ -18,3 +18,11 @@ jobs:
         run: echo "140.82.114.4 Github.com Check" > input.txt
       - name: test run script
         run: python ip-retrieve.py input.txt
+
+  install:
+    needs: run-script
+    runs-on: ubuntu-latest
+    steps:
+      - name: check
+      - run: |
+          pip list
