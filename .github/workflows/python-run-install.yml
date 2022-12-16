@@ -16,16 +16,27 @@ jobs:
           pip install -r requirements.txt
       - name: Create test file
         run: |
-          ls -l
           echo "140.82.114.4 Github.com Check" > input.txt
-          ls -l
       - name: test run script
         run: python ip-retrieve.py input.txt
 
   install:
-    needs: run-script
     runs-on: ubuntu-latest
     steps:
-      - name: check
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
         run: |
-          ls -l
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+      - name: Build with PyInstaller
+        run: |
+          pyinstaller --onefile ip-retrieve.py
+      - name: Run executable
+        run: |
+          echo "140.82.114.4 Github.com Check" > input.txt
+          ./dist/ip-retrieve input.txt
