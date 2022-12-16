@@ -15,7 +15,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       - name: Create test file
-        run: echo "140.82.114.4 Github.com Check" > input.txt
+        run: |
+          ls -l
+          echo "140.82.114.4 Github.com Check" > input.txt
+          ls -l
       - name: test run script
         run: python ip-retrieve.py input.txt
 
@@ -25,4 +28,4 @@ jobs:
     steps:
       - name: check
         run: |
-          pip list
+          ls -l
