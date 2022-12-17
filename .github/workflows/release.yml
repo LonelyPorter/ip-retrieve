@@ -10,11 +10,33 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+      - name: Install using PyInstaller
+        run: |
+          pyinstaller --onefile ip-retrieve.py
+      - name: test run
+        run: |
+          echo "140.82.114.4 Github.com Check" > input.txt
+          ./dist/ip-retrieve input.txt
       - name: Create release
+        id: create_release
         # tag name: ${{  github.ref_name }} / $GITHUB_REF_NAME
         run: |
-          curl \
+          curl -s \
             -X POST \
             -H "Authorization: Bearer ${{ github.token }}"\
             https://api.github.com/repos/${{ github.repository }}/releases \
-            -d '{"tag_name":"${{  github.ref_name }}","draft":false,"prerelease":false,"generate_release_notes":false}'
+            -d '{"tag_name":"${{  github.ref_name }}","draft":false,"prerelease":false,"generate_release_notes":false}' \
+          >> $GITHUB_OUTPUT
+      - name: Upload Asset
+        run: |
+          $res=${{ steps.create_release.outputs }}
+          echo $res
