@@ -42,7 +42,7 @@ jobs:
           cat create_release.json | python -c \
             "import sys, json; \
              url = json.load(sys.stdin)['upload_url']; \
-             url = url[:url.find('{')] + '?name=create_release.json'; \
+             url = url[:url.find('{')] + '?name=ip-retrieve.json'; \
              print(url); \
             " \
           )
@@ -53,5 +53,5 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             -H "Content-Type: application/octet-stream" \
             -H "Authorization: Bearer ${{ github.token }}"\
-            ${upload_url}
+            ${upload_url} --upload-file ./dist/ip-retrieve
           
