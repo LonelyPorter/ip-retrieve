@@ -35,8 +35,7 @@ jobs:
             -H "Authorization: Bearer ${{ github.token }}"\
             https://api.github.com/repos/${{ github.repository }}/releases \
             -d '{"tag_name":"${{  github.ref_name }}","draft":false,"prerelease":false,"generate_release_notes":false}' \
-          >> $GITHUB_OUTPUT
+          > create_release.json
       - name: Upload Asset
         run: |
-          $res=${{ steps.create_release.outputs }}
-          echo $res
+          cat create_release.json
