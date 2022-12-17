@@ -38,9 +38,19 @@ jobs:
           > create_release.json
       - name: Upload Asset
         run: |
+          upload_url=$( \
           cat create_release.json | python -c \
             "import sys, json; \
              url = json.load(sys.stdin)['upload_url']; \
              url = url[:url.find('{')] + '?name=dist/ip-retrieve'; \
-             print(url)
-            "
+             print(url); \
+            " \
+          )
+          echo $upload_url
+
+          curl \
+          -X POST \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer ${{ github.token }}"\
+          $(upload_url)
+          
