@@ -10,7 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: See env var
+      - name: Create release
+        # tag name: ${{  github.ref_name }} / $GITHUB_REF_NAME
         run: |
-          echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
-          echo "Tag name from github.ref_name: ${{  github.ref_name }}"
+          curl \
+            -X POST \
+            -H "Authorization: Bearer ${{ github.token }}"\
+            https://api.github.com/repos/${{ github.repository }}/releases \
+            -d '{"tag_name":"${{  github.ref_name }}","draft":false,"prerelease":false,"generate_release_notes":false}'
