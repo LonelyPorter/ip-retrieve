@@ -42,7 +42,7 @@ jobs:
           cat create_release.json | python -c \
             "import sys, json; \
              url = json.load(sys.stdin)['upload_url']; \
-             url = url[:url.find('{')] + '?name=ip-retrieve'; \
+             url = url[:url.find('{')] + '?name=ip-retrieve&label=linux'; \
              print(url); \
             " \
           )
