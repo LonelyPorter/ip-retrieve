@@ -2,7 +2,7 @@ name: python-run-install
 run-name: Verifying python script and convert executable
 on: [push]
 jobs:
-  test-script:
+  test_script:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -21,7 +21,7 @@ jobs:
         run: python ip-retrieve.py input.txt
 
   install:
-    needs: run-script
+    needs: test_script
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
