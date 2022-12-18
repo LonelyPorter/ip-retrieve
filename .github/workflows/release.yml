@@ -22,12 +22,11 @@ jobs:
       - name: Install using PyInstaller
         run: |
           pyinstaller --onefile ip-retrieve.py
-      - name: test run
+      - name: Test
         run: |
           echo "140.82.114.4 Github.com Check" > input.txt
           ./dist/ip-retrieve input.txt
       - name: Create release
-        id: create_release
         # tag name: ${{  github.ref_name }} / $GITHUB_REF_NAME
         run: |
           curl -s \
@@ -42,7 +41,7 @@ jobs:
           cat create_release.json | python -c \
             "import sys, json; \
              url = json.load(sys.stdin)['upload_url']; \
-             url = url[:url.find('{')] + '?name=ip-retrieve&label=linux'; \
+             url = url[:url.find('{')] + '?name=ip-retrieve&label=linux-executable'; \
              print(url); \
             " \
           )

@@ -1,8 +1,8 @@
 name: python-run-install
-run-name: Verifying python script and convert to .exe
+run-name: Verifying python script and convert executable
 on: [push]
 jobs:
-  run-script:
+  test-script:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -17,7 +17,7 @@ jobs:
       - name: Create test file
         run: |
           echo "140.82.114.4 Github.com Check" > input.txt
-      - name: test run script
+      - name: Test script
         run: python ip-retrieve.py input.txt
 
   install:
@@ -37,7 +37,7 @@ jobs:
       - name: Build with PyInstaller
         run: |
           pyinstaller --onefile ip-retrieve.py
-      - name: Run executable
+      - name: Test executable
         run: |
           echo "140.82.114.4 Github.com Check" > input.txt
           ./dist/ip-retrieve input.txt
