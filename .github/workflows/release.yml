@@ -1,0 +1,56 @@
+name: release
+run-name: Create Release
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+      - name: Install using PyInstaller
+        run: |
+          pyinstaller --onefile ip-retrieve.py
+      - name: Test
+        run: |
+          echo "140.82.114.4 Github.com Check" > input.txt
+          ./dist/ip-retrieve input.txt
+      - name: Create release
+        # tag name: ${{  github.ref_name }} / $GITHUB_REF_NAME
+        run: |
+          curl -s \
+            -X POST \
+            -H "Authorization: Bearer ${{ github.token }}"\
+            https://api.github.com/repos/${{ github.repository }}/releases \
+            -d '{"tag_name":"${{  github.ref_name }}","draft":false,"prerelease":false,"generate_release_notes":false}' \
+          > create_release.json
+      - name: Upload Asset
+        run: |
+          upload_url=$( \
+          cat create_release.json | python -c \
+            "import sys, json; \
+             url = json.load(sys.stdin)['upload_url']; \
+             url = url[:url.find('{')] + '?name=ip-retrieve&label=linux-executable'; \
+             print(url); \
+            " \
+          )
+          echo $upload_url
+
+          curl \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Content-Type: application/octet-stream" \
+            -H "Authorization: Bearer ${{ github.token }}"\
+            ${upload_url} --upload-file ./dist/ip-retrieve
+          

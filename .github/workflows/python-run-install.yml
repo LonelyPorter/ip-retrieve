@@ -1,0 +1,43 @@
+name: python-run-install
+run-name: Verifying python script and convert executable
+on: [push]
+jobs:
+  test_script:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Create test file
+        run: |
+          echo "140.82.114.4 Github.com Check" > input.txt
+      - name: Test script
+        run: python ip-retrieve.py input.txt
+
+  install:
+    needs: test_script
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+      - name: Build with PyInstaller
+        run: |
+          pyinstaller --onefile ip-retrieve.py
+      - name: Test executable
+        run: |
+          echo "140.82.114.4 Github.com Check" > input.txt
+          ./dist/ip-retrieve input.txt
