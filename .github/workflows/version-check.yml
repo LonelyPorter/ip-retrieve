@@ -13,5 +13,6 @@ jobs:
           fetch-depth: 3
       - name: Check last commit history
         run: |
-          git checkout HEAD~
-          git log -p HEAD~1..HEAD -- project.toml | grep version
+          git checkout HEAD^
+          echo "Checking diff now"
+          git log -p HEAD^..HEAD -- project.toml | grep version
