@@ -9,6 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
       - name: Check last commit history
         run: |
-          git log
+          git log -p
+          git branch -vva
+          git diff
+          git log -p HEAD~1..HEAD -- project.toml | grep version
