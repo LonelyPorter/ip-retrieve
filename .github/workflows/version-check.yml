@@ -13,7 +13,4 @@ jobs:
           fetch-depth: 2
       - name: Check last commit history
         run: |
-          git log -p
-          git branch -vva
-          git diff
           git log -p HEAD~1..HEAD -- project.toml | grep version
