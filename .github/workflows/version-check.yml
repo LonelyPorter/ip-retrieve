@@ -11,4 +11,4 @@ jobs:
       - uses: actions/checkout@v3
       - name: Check last commit history
         run: |
-          git log -p HEAD~1..HEAD -- project.toml | grep version
+          git log -p origin/version~1..origin/version -- project.toml | grep version
