@@ -1,0 +1,14 @@
+# For now this relys on human update version correctly
+name: version-check
+run-name: Version Check
+on: 
+  pull_request:
+    
+jobs:
+  version-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Check last commit history
+        run: |
+          git log -p -1 | grep version
