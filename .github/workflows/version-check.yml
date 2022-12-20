@@ -11,6 +11,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 2
       - name: Check version changes
         run: |
           git log -p HEAD^..HEAD
