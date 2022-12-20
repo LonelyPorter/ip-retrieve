@@ -10,9 +10,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          fetch-depth: 3
-      - name: Check last commit history
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Check version changes
         run: |
-          git checkout HEAD^
-          echo "Checking diff now"
+          git log -p HEAD^..HEAD
           git log -p HEAD^..HEAD -- project.toml | grep version
