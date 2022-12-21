@@ -1,0 +1,25 @@
+# For now this relys on human update version correctly
+name: version-check
+run-name: Version Check
+on: 
+  pull_request:
+    
+jobs:
+  version-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 2
+      - name: Grep version changes from last commit
+        run: |
+          git log -p HEAD^..HEAD -- project.toml | grep version || \
+
+          if [ $? != 0 ]; then
+            echo "No version being updated! Check before merge!"
+            exit 1
+          else
+            echo "Version has been updated, can merge safely"
+            exit 0
+          fi
