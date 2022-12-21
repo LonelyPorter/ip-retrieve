@@ -14,5 +14,12 @@ jobs:
           fetch-depth: 2
       - name: Check version changes
         run: |
-          git log -p HEAD^..HEAD
           git log -p HEAD^..HEAD -- project.toml | grep version
+
+          if [ $? != 0 ]; then
+            echo "No version being updated! Check before merge!"
+            exit 1
+          else
+            echo "Version has been updated, can merge safely"
+            exit 0
+          fi
