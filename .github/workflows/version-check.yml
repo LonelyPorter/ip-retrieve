@@ -12,9 +12,9 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 2
-      - name: Check version changes
+      - name: Grep version changes from last commit
         run: |
-          git log -p HEAD^..HEAD -- project.toml | grep version > /dev/null || \
+          git log -p HEAD^..HEAD -- project.toml | grep version || \
 
           if [ $? != 0 ]; then
             echo "No version being updated! Check before merge!"
