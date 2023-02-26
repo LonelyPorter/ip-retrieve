@@ -12,14 +12,15 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 2
-      - name: Grep version changes from last commit
-        run: |
-          git log -p HEAD^..HEAD -- project.toml | grep version || \
+      - uses:  LonelyPorter/porter-actins/version-check@version
+      # - name: Grep version changes from last commit
+      #   run: |
+      #     git log -p HEAD^..HEAD -- project.toml | grep version || \
 
-          if [ $? != 0 ]; then
-            echo "No version being updated! Check before merge!"
-            exit 1
-          else
-            echo "Version has been updated, can merge safely"
-            exit 0
-          fi
+      #     if [ $? != 0 ]; then
+      #       echo "No version being updated! Check before merge!"
+      #       exit 1
+      #     else
+      #       echo "Version has been updated, can merge safely"
+      #       exit 0
+      #     fi
