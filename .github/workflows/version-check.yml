@@ -8,4 +8,4 @@ jobs:
   version-check:
     runs-on: ubuntu-latest
     steps:
-      - uses: LonelyPorter/porter-actions/version-check@version
+      - uses: LonelyPorter/porter-actions/version-check
